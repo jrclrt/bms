@@ -1,0 +1,8 @@
+/src/Domain/bin
+/src/Domain/obj
+
+/src/Infrastructure/bin
+/src/Infrastructure/obj
+
+/src/Presentation/RestAPI/bin
+/src/Presentation/RestAPI/obj
