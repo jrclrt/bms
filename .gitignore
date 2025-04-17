@@ -6,3 +6,6 @@
 
 /src/Presentation/RestAPI/bin
 /src/Presentation/RestAPI/obj
+
+/src/Application/bin
+/src/Application/obj

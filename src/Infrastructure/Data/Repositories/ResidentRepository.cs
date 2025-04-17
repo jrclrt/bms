@@ -1,0 +1,42 @@
+using Application.Interfaces.Data;
+using Domain.Entities;
+using Infrastructure.Data.Contexts;
+using Microsoft.EntityFrameworkCore;
+
+namespace Infrastructure.Data.Repositories;
+
+public class ResidentRepository : IResidentRepository
+{
+    private readonly ApplicationDbContext _context;
+
+    public ResidentRepository(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<Resident?> CreateAsync(Resident entity)
+    {
+        _context.Residents?.AddAsync(entity);
+        await _context.SaveChangesAsync();
+
+        return entity;
+    }
+
+    public async void DeleteAsync(int id)
+    {
+        var resident = await _context.Residents?.SingleAsync(x => x.Id == id);
+        resident.IsDeleted = true;
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<Resident?> GetByIdAsync(int id)
+    {
+        return await _context.Residents?.SingleAsync(x => x.Id == id);
+    }
+
+    public async void UpdateAsync(Resident entity)
+    {
+        _context.Residents?.Update(entity);
+        await _context.SaveChangesAsync();
+    }
+}
