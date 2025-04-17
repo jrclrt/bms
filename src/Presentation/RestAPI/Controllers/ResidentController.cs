@@ -1,5 +1,4 @@
-using Application.DTOs.Resident;
-using Application.Interfaces.Data;
+using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace RestAPI.Controllers
@@ -8,9 +7,9 @@ namespace RestAPI.Controllers
     [ApiController]
     public class ResidentController : ControllerBase
     {
-        private readonly IResidentRepository _resident;
+        private readonly IResidentService _resident;
 
-        public ResidentController(IResidentRepository resident)
+        public ResidentController(IResidentService resident)
         {
             _resident = resident;
         }
@@ -19,8 +18,7 @@ namespace RestAPI.Controllers
         public async Task<IActionResult> GetResidentsAsync()
         {
             var residents = await _resident.GetAsync();
-
-           
+            
             return Ok(residents);
         }
 
@@ -28,7 +26,7 @@ namespace RestAPI.Controllers
         public async Task<IActionResult> GetResidentByIdAsync(int id)
         {
             var resident = await _resident.GetByIdAsync(id);
-            if (resident == null)
+            if (resident is null)
             {
                 return NotFound();
             }

@@ -11,9 +11,9 @@ public class ApplicationDbContext : DbContext
 
     }
 
-    public DbSet<Resident>? Residents { get; set; }
-    public DbSet<Household>? Households { get; set; }
-    public DbSet<ResidentHousehold>? ResidentHouseholds { get; set; }
+    public DbSet<Resident> Residents { get; set; }
+    public DbSet<Household> Households { get; set; }
+    public DbSet<ResidentHousehold> ResidentHouseholds { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

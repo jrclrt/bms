@@ -24,19 +24,20 @@ public class ResidentRepository : IResidentRepository
 
     public async void DeleteAsync(int id)
     {
-        var resident = await _context.Residents?.SingleAsync(x => x.Id == id);
+        var resident = await _context.Residents.FindAsync(id);
+        
         resident.IsDeleted = true;
         await _context.SaveChangesAsync();
     }
 
     public async Task<IEnumerable<Resident?>> GetAsync()
     {
-        return await _context.Residents?.Where(x => x.IsDeleted == false).ToListAsync();
+        return await _context.Residents.Where(x => x.IsDeleted == false).ToListAsync();
     }
 
     public async Task<Resident?> GetByIdAsync(int id)
     {
-        return await _context.Residents?.SingleOrDefaultAsync(x => x.Id == id);
+        return await _context.Residents.FindAsync(id);
     }
 
     public async void UpdateAsync(Resident entity)
