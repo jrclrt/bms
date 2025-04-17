@@ -29,9 +29,14 @@ public class ResidentRepository : IResidentRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task<IEnumerable<Resident?>> GetAsync()
+    {
+        return await _context.Residents?.Where(x => x.IsDeleted == false).ToListAsync();
+    }
+
     public async Task<Resident?> GetByIdAsync(int id)
     {
-        return await _context.Residents?.SingleAsync(x => x.Id == id);
+        return await _context.Residents?.SingleOrDefaultAsync(x => x.Id == id);
     }
 
     public async void UpdateAsync(Resident entity)

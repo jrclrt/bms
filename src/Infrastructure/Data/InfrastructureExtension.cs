@@ -1,4 +1,6 @@
+using Application.Interfaces.Data;
 using Infrastructure.Data.Contexts;
+using Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +15,8 @@ public static class InfrastructureExtension
         {
             options.UseSqlServer(configuration.GetConnectionString("DbConnection") ?? "");
         });
+
+        services.AddTransient<IResidentRepository, ResidentRepository>();
 
         return services;
     }
