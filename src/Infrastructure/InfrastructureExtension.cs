@@ -1,4 +1,5 @@
 using Application.Interfaces.Data;
+using Infrastructure.Data;
 using Infrastructure.Data.Contexts;
 using Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,8 @@ public static class InfrastructureExtension
         });
 
         services.AddTransient<IResidentRepository, ResidentRepository>();
+        
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
     }

@@ -14,19 +14,14 @@ public class ResidentRepository : IResidentRepository
         _context = context;
     }
 
-    public async Task<Resident> CreateAsync(Resident entity)
+    public async Task CreateAsync(Resident entity)
     {
-        await _context.Residents.AddAsync(entity);
-        await _context.SaveChangesAsync();
-
-        return entity;
+        await _context.Set<Resident>().AddAsync(entity);
     }
 
-    public async Task<bool> DeleteAsync(Resident entity)
+    public async Task DeleteAsync(Resident entity)
     {
-        await _context.SaveChangesAsync();
-        
-        return true;
+        _context.Set<Resident>().Update(entity);
     }
 
     public async Task<IEnumerable<Resident>> GetAsync()
@@ -39,10 +34,8 @@ public class ResidentRepository : IResidentRepository
         return await _context.Residents.SingleOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
     }
 
-    public async Task<bool> UpdateAsync(Resident entity)
+    public async Task UpdateAsync(Resident entity)
     {
-        await _context.SaveChangesAsync();
-        
-        return true;
+        _context.Set<Resident>().Update(entity);
     }
 }
