@@ -1,6 +1,7 @@
 using Application.DTOs.Resident;
 using Application.Interfaces.Data;
 using Application.Interfaces.Services;
+using Domain.Entities;
 
 namespace Application.Services;
 
@@ -59,5 +60,76 @@ public class ResidentService : IResidentService
         }
         
         return null;
+    }
+
+    public async Task<ReadResidentDTO> CreateAsync(CreateResidentDTO createResidentDto)
+    {
+        Resident resident = new Resident();
+        resident.FirstName = createResidentDto.FirstName;
+        resident.MiddleName = createResidentDto.MiddleName;
+        resident.LastName = createResidentDto.LastName;
+        resident.Suffix = createResidentDto.Suffix;
+        resident.BirthDate = createResidentDto.BirthDate;
+        resident.Gender = createResidentDto.Gender;
+        resident.Nationality = createResidentDto.Nationality;
+        resident.CreatedBy = "admin";
+        resident.CreatedDate = DateTime.UtcNow;
+
+        var residentResult = await _resident.CreateAsync(resident);
+        
+        ReadResidentDTO readResidentDto = new ReadResidentDTO();
+
+        if (residentResult is not null)
+        {
+            readResidentDto.Id = residentResult.Id;
+            readResidentDto.FirstName = residentResult.FirstName;
+            readResidentDto.MiddleName = residentResult.MiddleName;
+            readResidentDto.LastName = residentResult.LastName;
+            readResidentDto.Suffix = residentResult.Suffix;
+            readResidentDto.BirthDate = residentResult.BirthDate;
+            readResidentDto.Gender = residentResult.Gender;
+            readResidentDto.Nationality = residentResult.Nationality;
+            
+            return readResidentDto;
+        }
+        
+        return null;
+    }
+
+    public async Task<bool> UpdateAsync(int residentId, UpdateResidentDTO updateResidentDto)
+    {
+        var resident = await _resident.GetByIdAsync(residentId);
+        
+        if (resident is not null)
+        {
+            resident.FirstName = updateResidentDto.FirstName;
+            resident.MiddleName = updateResidentDto.MiddleName;
+            resident.LastName = updateResidentDto.LastName;
+            resident.Suffix = updateResidentDto.Suffix;
+            resident.BirthDate = updateResidentDto.BirthDate;
+            resident.Gender = updateResidentDto.Gender;
+            resident.Nationality = updateResidentDto.Nationality;
+            resident.UpdatedBy = "admin";
+            resident.UpdatedDate = DateTime.UtcNow;
+
+            return await _resident.UpdateAsync(resident);
+        }
+        
+        return false;
+    }
+
+    public async Task<bool> DeleteAsync(int residentId)
+    {
+        var resident = await _resident.GetByIdAsync(residentId);
+        
+        if (resident is not null)
+        {
+            resident.IsDeleted = true;
+            resident.UpdatedDate = DateTime.UtcNow;
+
+            return await _resident.DeleteAsync(resident);
+        }
+        
+        return false;
     }
 }

@@ -14,35 +14,35 @@ public class ResidentRepository : IResidentRepository
         _context = context;
     }
 
-    public async Task<Resident?> CreateAsync(Resident entity)
+    public async Task<Resident> CreateAsync(Resident entity)
     {
-        _context.Residents?.AddAsync(entity);
+        await _context.Residents.AddAsync(entity);
         await _context.SaveChangesAsync();
 
         return entity;
     }
 
-    public async void DeleteAsync(int id)
+    public async Task<bool> DeleteAsync(Resident entity)
     {
-        var resident = await _context.Residents.FindAsync(id);
-        
-        resident.IsDeleted = true;
         await _context.SaveChangesAsync();
+        
+        return true;
     }
 
-    public async Task<IEnumerable<Resident?>> GetAsync()
+    public async Task<IEnumerable<Resident>> GetAsync()
     {
         return await _context.Residents.Where(x => x.IsDeleted == false).ToListAsync();
     }
 
-    public async Task<Resident?> GetByIdAsync(int id)
+    public async Task<Resident> GetByIdAsync(int id)
     {
-        return await _context.Residents.FindAsync(id);
+        return await _context.Residents.SingleOrDefaultAsync(x => x.Id == id && x.IsDeleted == false);
     }
 
-    public async void UpdateAsync(Resident entity)
+    public async Task<bool> UpdateAsync(Resident entity)
     {
-        _context.Residents?.Update(entity);
         await _context.SaveChangesAsync();
+        
+        return true;
     }
 }
