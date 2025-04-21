@@ -10,4 +10,10 @@
 /src/Application/bin
 /src/Application/obj
 
+/src/bms.Domain/bin
+/src/bms.Domain/obj
+
+/src/bms.Application/bin
+/src/bms.Application/obj
+
 .idea
