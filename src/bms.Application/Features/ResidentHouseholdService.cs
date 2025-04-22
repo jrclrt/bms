@@ -1,6 +1,6 @@
 using bms.Application.DTOs.ResidentHousehold;
 using bms.Application.Interfaces;
-using bms.Domain.Entities;
+using bms.Domain.Aggregates.Residenthouseholds;
 using bms.Domain.Repositories;
 
 namespace bms.Application.Features;
@@ -31,10 +31,10 @@ public class ResidentHouseholdService : IResidentHouseholdService
             {
                 foreach (var householdId in createHouseholdFromResidentDto.HouseholdIds)
                 {
-                    var household = _householdRepository.GetByIdAsync(householdId);
+                    var household = await _householdRepository.GetByIdAsync(householdId);
                     if (household is not null)
                     {   
-                        var residentHousehold = resident.CreateHousehold(householdId);
+                        var residentHousehold = resident.CreateHousehold(household);
                         residentHouseholdList.Add(residentHousehold);
                     }
                 }

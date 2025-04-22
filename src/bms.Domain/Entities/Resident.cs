@@ -1,9 +1,13 @@
-using bms.Domain.Primitives;
+using bms.Domain.Aggregates.Residenthouseholds;
+using bms.Domain.Common;
 
 namespace bms.Domain.Entities;
 
-public class Resident : Entity
+public class Resident
 {
+    private readonly List<ResidentHousehold> _residentHouseholds = new();
+    
+    public Guid Id { get; private set; }
     public string FirstName { get; private set; } = null!;
     public string? MiddleName { get; private set; }
     public string LastName { get; private set; } = null!;
@@ -11,8 +15,9 @@ public class Resident : Entity
     public DateTime BirthDate { get; private set; }
     public string Gender { get; private set; } = null!;
     public string Nationality { get; private set; } = null!;
+    public AuditInfo AuditInfo { get; private set; }
     public IReadOnlyCollection<ResidentHousehold> ResidentHouseholds => _residentHouseholds;
-    private readonly List<ResidentHousehold> _residentHouseholds = new();
+    
     
     private Resident(Guid id, 
         string firstName, 
@@ -21,7 +26,8 @@ public class Resident : Entity
         string suffix, 
         DateTime birthDate, 
         string gender, 
-        string nationality) : base(id)
+        string nationality,
+        AuditInfo auditInfo)
     {
         Id = id;
         FirstName = firstName;
@@ -31,6 +37,7 @@ public class Resident : Entity
         BirthDate = birthDate;
         Gender = gender;
         Nationality = nationality;
+        AuditInfo = auditInfo;
     }
 
     public static Resident Create(Guid id, 
@@ -42,13 +49,23 @@ public class Resident : Entity
         string gender, 
         string nationality)
     {
-        var resident = new Resident(id, firstName, middleName, lastName, suffix, birthDate, gender, nationality);
+        var auditInfo = AuditInfo.ProcessCreate();
+        var resident = new Resident(id,
+            firstName, 
+            middleName, 
+            lastName, 
+            suffix, 
+            birthDate, 
+            gender, 
+            nationality, 
+            auditInfo);
+        
         return resident;
     }
 
-    public ResidentHousehold CreateHousehold(Guid householdId)
+    public ResidentHousehold CreateHousehold(Household household)
     {
-        var residentHousehold = new ResidentHousehold(Guid.NewGuid(), this.Id, householdId);
+        var residentHousehold = ResidentHousehold.Create(Guid.NewGuid(), this, household);
         
         _residentHouseholds.Add(residentHousehold);
         

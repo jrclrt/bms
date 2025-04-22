@@ -1,4 +1,4 @@
-using bms.Domain.Entities;
+using bms.Domain.Aggregates.Residenthouseholds;
 
 namespace bms.Domain.Repositories;
 

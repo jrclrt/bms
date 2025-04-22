@@ -1,9 +1,20 @@
-using bms.Domain.Primitives;
+using bms.Domain.Common;
 
 namespace bms.Domain.Entities;
 
-public class Household : Entity
+public class Household
 {
+    public Guid Id { get; private set; }
+    public string HouseholdName { get; private set; } = null!;
+    public string Street { get; private set; } = null!;
+    public string Barangay { get; private set; } = null!;
+    public string District { get; private set; } = null!;
+    public string City { get; private set; } = null!;
+    public string Region { get; private set; } = null!;
+    public string Country { get; private set; } = null!;
+    public string Zipcode { get; private set; } = null!;
+    public AuditInfo AuditInfo { get; private set; }
+    
     private Household(Guid id, 
         string householdName, 
         string street, 
@@ -12,7 +23,8 @@ public class Household : Entity
         string city,
         string region,
         string country,
-        string zipcode)
+        string zipcode,
+        AuditInfo auditInfo)
     {
         Id = id;
         HouseholdName = householdName;
@@ -23,16 +35,8 @@ public class Household : Entity
         Region = region;
         Country = country;
         Zipcode = zipcode;
+        AuditInfo = auditInfo;
     }
-    
-    public string HouseholdName { get; private set; } = null!;
-    public string Street { get; private set; } = null!;
-    public string Barangay { get; private set; } = null!;
-    public string District { get; private set; } = null!;
-    public string City { get; private set; } = null!;
-    public string Region { get; private set; } = null!;
-    public string Country { get; private set; } = null!;
-    public string Zipcode { get; private set; } = null!;
 
     public static Household Create(Guid id, 
         string householdName, 
@@ -44,6 +48,7 @@ public class Household : Entity
         string country,
         string zipcode)
     {
+        var auditInfo = AuditInfo.ProcessCreate();
         var household = new Household(id, 
             householdName, 
             street, 
@@ -52,7 +57,8 @@ public class Household : Entity
             city, 
             region, 
             country, 
-            zipcode);
+            zipcode,
+            auditInfo);
         
         return household;
     }
